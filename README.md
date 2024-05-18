@@ -26,3 +26,5 @@ A browser extension to get total number of followers, median reputation, and fol
     - Toggle the switch labeled "Developer mode" again to turn it off.
 12. The extension is now installed and ready to use. You can access its features by clicking on its icon in the browser toolbar.
 
+### References
+- 20240518 - [Introducing "Steem Follower Checker": A new Open Source browser plugin](https://steemit.com/hive-151113/@remlaps/introducing-steem-follower-checker-a)
