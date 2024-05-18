@@ -26,8 +26,3 @@ A browser extension to get total number of followers, median reputation, and fol
     - Toggle the switch labeled "Developer mode" again to turn it off.
 12. The extension is now installed and ready to use. You can access its features by clicking on its icon in the browser toolbar.
 
-#### Installing from ZIP File:
-
-1. Download the ZIP file of the extension package (`Steem-Follower-Checker-master.zip`) from the provided link.
-2. Extract the contents of the downloaded ZIP file to a folder on your computer.
-3. Follow steps 4 to 12 from the "Installing from GitHub Repository" section above.
