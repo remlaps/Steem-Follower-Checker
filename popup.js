@@ -133,3 +133,21 @@ function calculateFollowerStrength(followerCount, medianReputation) {
     return 0.01.toFixed(2);
   }
 }
+
+// Function to retrieve version number from manifest.json
+function getVersionNumber() {
+  return chrome.runtime.getManifest().version;
+}
+
+// Function to update the HTML content of the popup with the version number
+function updatePopupVersion() {
+  var versionElement = document.getElementById('version');
+  if (versionElement) {
+    versionElement.textContent = getVersionNumber();
+  }
+}
+
+// Call the updatePopupVersion function when the popup is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  updatePopupVersion();
+});
