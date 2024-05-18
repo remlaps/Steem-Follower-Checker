@@ -13,7 +13,7 @@ A browser extension to get total number of followers, median reputation, and fol
 3. Extract the contents of the downloaded ZIP file to a folder on your computer.
 4. Open your browser (Brave or Chrome).
 5. Navigate to the browser's extension management page:
-   - **Brave**: Click on the three-dot menu icon in the top-right corner, select "More tools" > "Extensions". (or go to [brave://extensions](brave://extensions) in the URL bar)
+   - **Brave**: Click on the three-dot menu icon in the top-right corner, select "More tools" > "Extensions". (or go to brave://extensions in the URL bar)
    - **Chrome**: Click on the three-dot menu icon in the top-right corner, select "More tools" > "Extensions".
 6. Ensure that Developer Mode is enabled:
    - Toggle the switch labeled "Developer mode" in the top-right corner.
