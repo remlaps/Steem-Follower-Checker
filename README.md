@@ -27,6 +27,6 @@ A browser extension to get total number of followers, median reputation, and fol
 
 #### Installing from ZIP File:
 
-1. Download the ZIP file of the extension package (`steem-follower-checker-20240518.zip`) from the provided link.
+1. Download the ZIP file of the extension package (`Steem-Follower-Checker-master.zip`) from the provided link.
 2. Extract the contents of the downloaded ZIP file to a folder on your computer.
 3. Follow steps 4 to 11 from the "Installing from GitHub Repository" section above.
