@@ -1,4 +1,4 @@
-# Steem-Follower-Checker
+# Steem Follower Checker
 
 A browser extension to get total number of followers, median reputation, and follower network strength for a Steem account.
 
@@ -25,6 +25,18 @@ A browser extension to get total number of followers, median reputation, and fol
 11. Once the extension is installed and enabled, it is recommended to disable Developer Mode for security reasons:
     - Toggle the switch labeled "Developer mode" again to turn it off.
 12. The extension is now installed and ready to use. You can access its features by clicking on its icon in the browser toolbar.
+
+## Contributing
+
+If you would like to contribute to this project, please fork the repository and submit a pull request. For major changes, please open an issue to discuss what you would like to change.
+
+## Contact
+
+For any questions or suggestions, feel free to open an issue on the GitHub repository or contact the repository owner directly.
+
+### Disclaimer
+
+This extension is provided as-is without warranty of any kind. The developer is not responsible for any issues that may arise from using this extension.
 
 ### References
 - 20240518 - [Introducing "Steem Follower Checker": A new Open Source browser plugin](https://steemit.com/hive-151113/@remlaps/introducing-steem-follower-checker-a)
