@@ -2,22 +2,52 @@ document.getElementById('checkFollowers').addEventListener('click', function() {
   const accountName = document.getElementById('accountName').value;
   if (accountName) {
     document.getElementById('progress').innerHTML = `<p><strong>Checking followers for account: ${accountName}</strong></p>`;
-    getFollowers(accountName);
+    getAccountAgeInDays(accountName).then(ageInDays => {
+      getFollowers(accountName, ageInDays);
+    }).catch(error => {
+      console.error('Error fetching account age:', error);
+      alert('Error fetching account age. Please try again.');
+    });
   } else {
     alert('Please enter a Steemit account name.');
   }
 });
 
-async function getFollowers(accountName) {
-  // Clear previous account information
+async function getAccountAgeInDays(accountName) {
+  const apiUrl = 'https://api.steemit.com';
+  const requestData = {
+    jsonrpc: "2.0",
+    method: "condenser_api.get_accounts",
+    params: [[accountName]],
+    id: 1
+  };
+
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestData)
+  });
+
+  const data = await response.json();
+  const createdDate = new Date(data.result[0].created);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate - createdDate);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays;
+}
+
+async function getFollowers(accountName, accountAgeInDays) {
   document.getElementById('results').innerHTML = '';
   document.getElementById('progress').innerHTML = '';
 
   let followers = [];
   let lastFollower = null;
   let previousLastFollower = null;
-  let iterationCounter = 0; // Initialize the iteration counter
-  const limit = 100; // Setting the limit to 100 as per your change
+  let iterationCounter = 0;
+  const limit = 100;
 
   while (true) {
     const params = JSON.stringify({
@@ -36,12 +66,10 @@ async function getFollowers(accountName) {
     const data = await response.json();
     const newFollowers = data.result;
 
-    // If no new followers are returned, break the loop
     if (!newFollowers || newFollowers.length === 0) {
       break;
     }
 
-    // If we are continuing from the last follower, remove the duplicate entry
     if (lastFollower && newFollowers[0].follower === lastFollower) {
       newFollowers.shift();
     }
@@ -50,48 +78,41 @@ async function getFollowers(accountName) {
       followers = followers.concat(newFollowers);
       previousLastFollower = lastFollower;
       lastFollower = newFollowers[newFollowers.length - 1].follower;
-
-      // Increment the iteration counter
       iterationCounter++;
 
-      // Update progress after every 5 iterations
       if (iterationCounter === 5) {
         document.getElementById('progress').innerHTML = `<p><strong>Fetched ${followers.length} followers so far...</strong></p>`;
-        iterationCounter = 0; // Reset the iteration counter
+        iterationCounter = 0;
       }
     }
 
-    // If we received fewer followers than the limit - 1, we have reached the end
     if (newFollowers.length < limit - 1) {
       break;
     }
 
-    // If the last follower hasn't changed, we have reached the end
     if (lastFollower === previousLastFollower) {
       break;
     }
   }
-  
 
   const totalFollowers = followers.length;
+  const newFollowersPerMonth = (365.25 * totalFollowers) / (12 * accountAgeInDays);
   const reputations = followers.map(f => f.reputation).sort((a, b) => a - b);
   const medianReputation = calculateMedian(reputations);
-
-  // Calculate Follower Strength
   const followerStrength = calculateFollowerStrength(totalFollowers, medianReputation);
-  
-  // After the while loop completes (iteration through followers list is complete)
-  // Clear the progress indicator
-  document.getElementById('progress').innerHTML = '';  
 
+  document.getElementById('progress').innerHTML = '';
   document.getElementById('results').innerHTML = `
-	<p><strong>Account Name:</strong> ${accountName}</p>
-	<p><strong>Total Followers:</strong> ${totalFollowers}</p>
-	<p><strong>Median Follower Reputation:</strong> ${medianReputation.toFixed(2)}</p>
-	<p><strong>Follower Network Strength:</strong> ${Number(followerStrength).toFixed(2)}</p>
+    <p><strong>Account Name:</strong> ${accountName}</p>
+    <p><strong>Account Age in Days:</strong> ${accountAgeInDays}</p>
+    <p><strong>Total Followers:</strong> ${totalFollowers}</p>
+    <p><strong>New Followers per month:</strong> ${newFollowersPerMonth}</p>
+    <p><strong>Median Follower Reputation:</strong> ${medianReputation.toFixed(2)}</p>
+	
+    <p><strong>Follower Network Strength:</strong> ${Number(followerStrength).toFixed(2)}</p>
   `;
 
-  // Log the total followers, median reputation, and follower strength
+  console.log(`Account Age in Days: ${accountAgeInDays}`);
   console.log(`Total Followers: ${totalFollowers}`);
   console.log(`Median Follower Reputation: ${medianReputation}`);
   console.log(`Follower Network Strength: ${followerStrength}`);
@@ -107,7 +128,7 @@ function calculateMedian(numbers) {
 }
 
 function calculateFollowerStrength(followerCount, medianReputation) {
-  const maxFollowerCount = 2000; // Max follower count for normalization
+  const maxFollowerCount = 2000;
   const maxReputation = Math.min(102, 40 + 62 * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
 
   const threshold = 30;
@@ -115,18 +136,16 @@ function calculateFollowerStrength(followerCount, medianReputation) {
   let normMedianReputation = 0;
   let normFollowerCount = 0;
 
-  if (medianReputation > threshold && followerCount >= minFollowers ) {
+  if (medianReputation > threshold && followerCount >= minFollowers) {
     normMedianReputation = ((medianReputation - threshold) / (maxReputation - threshold));
     normMedianReputation = Math.min(1, normMedianReputation);
 
-    normFollowerCount = ( followerCount - minFollowers ) / ( maxFollowerCount - minFollowers );
-	normFollowerCount = Math.min( 1, normFollowerCount );
-	
-    // Calculate distance from bottom-left corner
-    const distance = Math.sqrt(Math.pow(normFollowerCount, 2) + Math.pow(normMedianReputation, 2));
-	console.log(`Normalized followers: ${normFollowerCount}, Normalized reputation: ${normMedianReputation}`);
+    normFollowerCount = (followerCount - minFollowers) / (maxFollowerCount - minFollowers);
+    normFollowerCount = Math.min(1, normFollowerCount);
 
-    // Calculate strength based on distance
+    const distance = Math.sqrt(Math.pow(normFollowerCount, 2) + Math.pow(normMedianReputation, 2));
+    console.log(`Normalized followers: ${normFollowerCount}, Normalized reputation: ${normMedianReputation}`);
+
     const strength = Math.max(distance, 0.01);
     return strength.toFixed(2);
   } else {
@@ -134,12 +153,10 @@ function calculateFollowerStrength(followerCount, medianReputation) {
   }
 }
 
-// Function to retrieve version number from manifest.json
 function getVersionNumber() {
   return chrome.runtime.getManifest().version;
 }
 
-// Function to update the HTML content of the popup with the version number
 function updatePopupVersion() {
   var versionElement = document.getElementById('version');
   if (versionElement) {
@@ -147,7 +164,6 @@ function updatePopupVersion() {
   }
 }
 
-// Call the updatePopupVersion function when the popup is loaded
 document.addEventListener('DOMContentLoaded', function() {
   updatePopupVersion();
 });
