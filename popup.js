@@ -99,7 +99,7 @@ async function getFollowers(accountName, accountAgeInDays) {
   const newFollowersPerMonth = (365.25 * totalFollowers) / (12 * accountAgeInDays);
   const reputations = followers.map(f => f.reputation).sort((a, b) => a - b);
   const medianReputation = calculateMedian(reputations);
-  const followerStrength = calculateFollowerStrength(totalFollowers, medianReputation);
+  const followerStrength = calculateFollowerStrength(newFollowersPerMonth, medianReputation);
 
   document.getElementById('progress').innerHTML = '';
   document.getElementById('results').innerHTML = `
@@ -128,11 +128,11 @@ function calculateMedian(numbers) {
 }
 
 function calculateFollowerStrength(followerCount, medianReputation) {
-  const maxFollowerCount = 2000;
-  const maxReputation = Math.min(102, 40 + 62 * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
+  const maxFollowerCount = 80;
+  const maxReputation = Math.min(112, 40 + 72 * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
 
   const threshold = 30;
-  const minFollowers = 20;
+  const minFollowers = 1;
   let normMedianReputation = 0;
   let normFollowerCount = 0;
 
