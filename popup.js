@@ -1,4 +1,14 @@
 document.getElementById('checkFollowers').addEventListener('click', function() {
+  checkFollowers();
+});
+
+document.getElementById('accountName').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    checkFollowers();
+  }
+});
+
+function checkFollowers() {
   const accountName = document.getElementById('accountName').value;
   if (accountName) {
     document.getElementById('progress').innerHTML = `<p><strong>Checking followers for account: ${accountName}</strong></p>`;
@@ -11,7 +21,7 @@ document.getElementById('checkFollowers').addEventListener('click', function() {
   } else {
     alert('Please enter a Steemit account name.');
   }
-});
+}
 
 async function getAccountAgeInDays(accountName) {
   const apiUrl = 'https://api.steemit.com';
@@ -128,8 +138,8 @@ function calculateMedian(numbers) {
 }
 
 function calculateFollowerStrength(followerCount, medianReputation) {
-  const maxFollowerCount = 100;
-  const maxReputation = Math.min(200, 40 + 160 * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
+  const maxFollowerCount = 120;
+  const maxReputation = Math.min(120, 40 + 80 * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
 
   const threshold = 25;
   const minFollowers = 1;
