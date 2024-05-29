@@ -138,8 +138,9 @@ function calculateMedian(numbers) {
 }
 
 function calculateFollowerStrength(followerCount, medianReputation) {
-  const maxFollowerCount = 120;
-  const maxReputation = Math.min(120, 40 + 80 * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
+  const maxFollowerCount = 60;
+  const base = 30 - Math.min ( 30, followerCount / 20 );
+  const maxReputation = Math.min(120, base + (120 - base)  * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
 
   const threshold = 25;
   const minFollowers = 1;
@@ -147,7 +148,8 @@ function calculateFollowerStrength(followerCount, medianReputation) {
   let normFollowerCount = 0;
 
   if (medianReputation > threshold && followerCount >= minFollowers) {
-    normMedianReputation = ((medianReputation - threshold) / (maxReputation - threshold));
+    // normMedianReputation = ((medianReputation - threshold) / (maxReputation - threshold));
+	normMedianReputation = ((medianReputation - threshold) / maxReputation);
     normMedianReputation = Math.min(1, normMedianReputation);
 
     normFollowerCount = (followerCount - minFollowers) / (maxFollowerCount - minFollowers);
