@@ -34,9 +34,13 @@ If you would like to contribute to this project, please fork the repository and 
 
 For any questions or suggestions, feel free to open an issue on the GitHub repository or contact the repository owner directly.
 
+## Revisions
+- June 30, 2024 - Scoring algorithm update for Q2/2024
+  
 ### Disclaimer
 
 This extension is provided as-is without warranty of any kind. The developer is not responsible for any issues that may arise from using this extension.
 
 ### References
 - 20240518 - [Introducing "Steem Follower Checker": A new Open Source browser plugin](https://steemit.com/hive-151113/@remlaps/introducing-steem-follower-checker-a)
+- 20240630 - [Feedback requested: June 30 release candidate for "Steem Follower Checker" browser extension](https://steemit.com/hive-127586/@remlaps/feedback-requested-june-30-release)
