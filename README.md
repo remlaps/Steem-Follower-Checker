@@ -43,4 +43,4 @@ This extension is provided as-is without warranty of any kind. The developer is 
 
 ### References
 - 20240518 - [Introducing "Steem Follower Checker": A new Open Source browser plugin](https://steemit.com/hive-151113/@remlaps/introducing-steem-follower-checker-a)
-- 20240630 - [Feedback requested: June 30 release candidate for "Steem Follower Checker" browser extension](https://steemit.com/hive-127586/@remlaps/feedback-requested-june-30-release)
+- 20240607 - [Feedback requested: June 30 release candidate for "Steem Follower Checker" browser extension](https://steemit.com/hive-127586/@remlaps/feedback-requested-june-30-release)
