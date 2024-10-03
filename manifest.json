@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Steem Follower Checker",
-  "version": "20240630",
+  "version": "20241231",
   "description": "Get total number of followers, median reputation, and follower network strength for a Steem account.",
   "permissions": [
     "activeTab"
