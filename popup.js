@@ -142,12 +142,12 @@ function calculateMedian(numbers) {
 }
 
 function calculateFollowerStrength(followerCount, medianReputation) {
-  const maxFollowerCount = 50;
-  const base = Math.max(1, 28 - Math.min ( 28, followerCount / 20 ));
-  const maxReputation = Math.min(120, base + (60 - base)  * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
+  const maxFollowerCount = 60;
+  const base = Math.max(1, 30 - Math.min ( 30, followerCount / 5 ));
+  const maxReputation = Math.min(50, base + (50 - base)  * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
 
   const threshold = 26;
-  const minFollowers = 0.25;
+  const minFollowers = 0.5;
   let normMedianReputation = 0;
   let normFollowerCount = 0;
 
@@ -181,8 +181,8 @@ function updatePopupVersion() {
 }
 
 function weightedAge(days) {
-  let firstTerm = Math.pow(2, 1/(365.25 * 3));     // Daily adjustment for inactive accounts that accumulate over time.
-  let commonRatio = Math.pow(2, 1/(365.25 * 3));   // Every 3 years, the weight of a day doubles.
+  let firstTerm = Math.pow(2, 1/(365.25 * 4));     // Daily adjustment for inactive accounts that accumulate over time.
+  let commonRatio = Math.pow(2, 1/(365.25 * 4));   // Every 4 years, the weight of a day doubles.
   let adjustedAge = firstTerm * (Math.pow(commonRatio, days) - 1) / (commonRatio - 1);
   return adjustedAge;
 }
