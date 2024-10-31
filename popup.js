@@ -106,17 +106,21 @@ async function getFollowers(accountName, accountAgeInDays) {
   }
 
   const totalFollowers = followers.length;
+  const weightedAccountAgeInDays = weightedAge(accountAgeInDays);
   const newFollowersPerMonth = (365.25 * totalFollowers) / (12 * accountAgeInDays);
+  const adjustedFollowersPerMonth = (365.25 * totalFollowers) / (12 * weightedAccountAgeInDays);
   const reputations = followers.map(f => f.reputation).sort((a, b) => a - b);
   const medianReputation = calculateMedian(reputations);
-  const followerStrength = calculateFollowerStrength(newFollowersPerMonth, medianReputation);
+  const followerStrength = calculateFollowerStrength(adjustedFollowersPerMonth, medianReputation);
 
   document.getElementById('progress').innerHTML = '';
   document.getElementById('results').innerHTML = `
     <p><strong>Account Name:</strong> ${accountName}</p>
     <p><strong>Account Age in Days:</strong> ${accountAgeInDays}</p>
+    <p><strong>Adjusted Account Age in Days:</strong> ${weightedAccountAgeInDays}</p>
     <p><strong>Total Followers:</strong> ${totalFollowers}</p>
     <p><strong>New Followers per month:</strong> ${newFollowersPerMonth}</p>
+    <p><strong>Adjusted Followers per month:</strong> ${adjustedFollowersPerMonth}</p>
     <p><strong>Median Follower Reputation:</strong> ${medianReputation.toFixed(2)}</p>
 	
     <p><strong>Follower Network Strength:</strong> ${Number(followerStrength).toFixed(2)}</p>
@@ -139,17 +143,17 @@ function calculateMedian(numbers) {
 
 function calculateFollowerStrength(followerCount, medianReputation) {
   const maxFollowerCount = 60;
-  const base = Math.max(1, 30 - Math.min ( 30, followerCount / 20 ));
-  const maxReputation = Math.min(120, base + (120 - base)  * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
+  const base = Math.max(1, 30 - Math.min ( 30, followerCount / 5 ));
+  const maxReputation = Math.min(50, base + (50 - base)  * (Math.max(0, (maxFollowerCount - followerCount)) / maxFollowerCount));
 
   const threshold = 26;
-  const minFollowers = 1;
+  const minFollowers = 0.5;
   let normMedianReputation = 0;
   let normFollowerCount = 0;
 
   if (medianReputation > threshold && followerCount >= minFollowers) {
     // normMedianReputation = ((medianReputation - threshold) / (maxReputation - threshold));
-	normMedianReputation = ((medianReputation - threshold) / maxReputation);
+	  normMedianReputation = ((medianReputation - threshold) / maxReputation);
     normMedianReputation = Math.min(1, normMedianReputation);
 
     normFollowerCount = (followerCount - minFollowers) / (maxFollowerCount - minFollowers);
@@ -174,6 +178,13 @@ function updatePopupVersion() {
   if (versionElement) {
     versionElement.textContent = getVersionNumber();
   }
+}
+
+function weightedAge(days) {
+  let firstTerm = Math.pow(2, 1/(365.25 * 4));     // Daily adjustment for inactive accounts that accumulate over time.
+  let commonRatio = Math.pow(2, 1/(365.25 * 4));   // Every 4 years, the weight of a day doubles.
+  let adjustedAge = firstTerm * (Math.pow(commonRatio, days) - 1) / (commonRatio - 1);
+  return adjustedAge;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
